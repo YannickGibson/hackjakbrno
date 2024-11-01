@@ -20,3 +20,4 @@ setuptools
 pandas
 levenshtein
 biopython
+tqdm
