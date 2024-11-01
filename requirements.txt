@@ -2,3 +2,4 @@ torch
 transformers
 matplotlib
 scikit-learn
+jupyterlab
