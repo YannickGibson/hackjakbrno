@@ -1,6 +1,7 @@
 /env/
 data/*
 !.gitkeep
+/data/sequeventor
 
 
 # Byte-compiled / optimized / DLL files
