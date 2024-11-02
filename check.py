@@ -3,7 +3,7 @@ from Bio.pairwise2 import format_alignment
 
 
 def is_match_pairwise2(gene: str, sequence: str, verbose_if_matched=True, verbose=False) -> tuple[bool, float]:
-    SCORE_PERCENT_THRESHOLD = 0.4
+    SCORE_PERCENT_THRESHOLD = 0.385
 
     # Find alignment
     match_bonus = 2
@@ -16,14 +16,14 @@ def is_match_pairwise2(gene: str, sequence: str, verbose_if_matched=True, verbos
         return False, 0
 
     score = _alignments[0].score
-    max_score = (len(gene) * 3)
+    max_score = (len(gene) * 2)
     score_percent = score / max_score
-    print(score, max_score, score_percent)
 
     # Evaluate result
     if len(_alignments) > 0 and score > score_percent > SCORE_PERCENT_THRESHOLD:
         if verbose_if_matched:
             print(format_alignment(*_alignments[0]))
+            pass
         print(f"Score Percentage: {score_percent:.3f}")
         return True, score
     elif verbose:

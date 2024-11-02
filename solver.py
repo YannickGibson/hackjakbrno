@@ -19,7 +19,7 @@ def main() -> None:
     genes_vectors = {}
     gene_names = []
     files = os.listdir(genes_path)
-    for i, file in tqdm(enumerate(files)):
+    for i, file in enumerate(tqdm(files)):
         with open(genes_path + "/" + file, 'r') as gene_file:
             gene_names.append(".".join(file.split(".")[:-1]))
             genes.append([])
@@ -42,18 +42,19 @@ def main() -> None:
         for barcode_name in barcodes:
             print(f"Checking barcode: {barcode_name}")
             # Check if barcode is in genes
-            for gene_index, gene in tqdm(enumerate(genes)):
+            for gene_index, gene in enumerate(tqdm(genes)):
                 if barcode_gene_positive[barcode_name][gene_index]:  # constraint is already satisfied
                     continue
-                gene = str(genes_vectors[gene_index][0])  # get string sequence
-                
+                gene_list_str = str(genes_vectors[gene_index][0])  # get string sequence
+
                 # Cosine similarity vector database search
-                matches: list[tuple] = database.search(barcode_name, gene)
+                matches: list[tuple] = database.search(barcode_name, gene_list_str)
                 print(f"Checking {len(matches)} amount of matches.")
 
                 # Verify similar vectors
                 for barcode_name, file_path, index, sequence_string, sequence_vector in matches:
-                    is_match, score = is_match_pairwise2(gene, sequence_string)
+                    is_match, score = is_match_pairwise2(str(gene[0].seq), sequence_string, verbose=True)
+                    # print(f"IS MATCH: {is_match}  AND SCORE: {score}")
                     if is_match:
                         barcode_gene_positive[barcode_name][gene_index] = True
                         break
