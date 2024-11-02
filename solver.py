@@ -31,7 +31,7 @@ def main() -> None:
     barcode_gene_positive = {barcode: [False] * len(genes) for barcode in barcodes}
 
     # Check barcodes
-    sequenator_finished = False
+    sequenator_finished = True
     while True:
         for barcode_name in barcodes:
             print(f"Checking barcode: {barcode_name}")
