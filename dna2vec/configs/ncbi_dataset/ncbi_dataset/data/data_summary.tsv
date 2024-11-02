@@ -1,0 +1,3 @@
+Organism Scientific Name	Organism Common Name	Organism Qualifier	Taxonomy id	Assembly Name	Assembly Accession	Source	Annotation	Level	Contig N50	Size	Submission Date	Gene Count	BioProject	BioSample
+Homo sapiens	human		9606	T2T-CHM13v2.0	GCA_009914755.4	GenBank		Complete Genome	150617247	3117275501	2022-01-24		PRJNA559484	SAMN03255769
+Homo sapiens	human		9606	T2T-CHM13v2.0	GCF_009914755.1	RefSeq	GCF_009914755.1-RS_2024_08	Complete Genome	150617247	3117275501	2022-01-24	58422	PRJNA559484	SAMN03255769

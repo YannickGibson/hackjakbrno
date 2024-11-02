@@ -1,0 +1,6 @@
+name,indices,link
+CYTOR,87455427;87521518,https://www.ncbi.nlm.nih.gov/gene?cmd=retrieve&dopt=default&rn=1&list_uids=112597
+MEMO1,31865060;32011230,https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&lastVirtModeType=default&lastVirtModeExtraState=&virtModeType=default&virtMode=0&nonVirtPosition=&position=chr2%3A31865060%2D32011230&hgsid=1649502460_T30PaagzZpxwhVa9aDBXrlzPIh1X
+TPO,1374047;1543673,https://www.ncbi.nlm.nih.gov/gene?cmd=retrieve&dopt=default&list_uids=7173&rn=1
+THADA,43230851;43596038,https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&lastVirtModeType=default&lastVirtModeExtraState=&virtModeType=default&virtMode=0&nonVirtPosition=&position=chr2%3A43230851%2D43596038&hgsid=1649503118_nsZ3a6dq1QhGCUgMktUyAzXazoD2
+ERICH2,70339163;70371228,https://genome.ucsc.edu/cgi-bin/hgTracks?db=mm10&lastVirtModeType=default&lastVirtModeExtraState=&virtModeType=default&virtMode=0&nonVirtPosition=&position=chr2%3A70339163%2D70371228&hgsid=1649503784_eifzyAYlAD3J3EDvXIGzpyJKIU9Z

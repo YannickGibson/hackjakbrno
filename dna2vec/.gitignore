@@ -1,0 +1,36 @@
+# vs code
+.vscode
+
+# pythonn
+#*.egg-info
+#__pycache__
+#*.txt
+
+
+# mac os
+.DS_Store
+
+ data
+*.fna.fai
+*.fna
+
+
+wandb
+data/NC_000002.12.txt
+data/subsequences_sample.txt
+
+models
+tests/test_models
+
+# paper
+
+data/visualizations/*
+docs/*
+docs/examples/embedding_space.ipynb
+*.pkl
+*.fa*
+data/*
+*test_cache*
+
+*.tgz
+art*

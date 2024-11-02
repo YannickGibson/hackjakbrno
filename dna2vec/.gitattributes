@@ -1,0 +1,1 @@
+tests/data/NC_000002.12.txt filter=lfs diff=lfs merge=lfs -text

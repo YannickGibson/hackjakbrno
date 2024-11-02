@@ -1,0 +1,16 @@
+ch2: "/home/pholur/dna2vec/evaluate/data/chromosome_2/floodfill.pkl"
+ch3: "/home/pholur/dna2vec/evaluate/data/chromosome_3/floodfill.pkl"
+all: "/mnt/SSD2/pholur/General_Models/data/all/floodfill.pkl"
+
+ch11: "/mnt/SSD2/pholur/General_Models/data/chr11/floodfill.pkl"
+chY: "/mnt/SSD2/pholur/General_Models/data/chrY/floodfill.pkl"
+
+chimp2A: "/mnt/SSD2/pholur/General_Models/data/chimp_2a/floodfill.pkl"
+chimp2B: "/mnt/SSD2/pholur/General_Models/data/chimp_2b/floodfill.pkl"
+
+rat1: "/mnt/SSD2/pholur/General_Models/data/rat1/floodfill.pkl"
+rat2: "/mnt/SSD2/pholur/General_Models/data/rat2/floodfill.pkl"
+
+ch23Y: "/mnt/SSD2/pholur/General_Models/data/chr23Y/floodfill.pkl"
+
+chM: "/mnt/SSD2/pholur/General_Models/data/chM/floodfill.pkl"

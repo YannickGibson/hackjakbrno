@@ -1,0 +1,18 @@
+ch2: "/home/pholur/dna2vec/evaluate/data/chromosome_2/NC_000002.fasta"
+ch3: "/home/pholur/dna2vec/evaluate/data/chromosome_3/NC_000003.fasta"
+
+all: "/mnt/SSD2/pholur/General_Models/data/all/chm13v2.0.fa"  
+
+ch11: "/mnt/SSD2/pholur/General_Models/data/chr11/chr11.fasta"
+
+chY: "/mnt/SSD2/pholur/General_Models/data/chrY/chrY.fasta"
+
+chimp2A: "/mnt/SSD2/pholur/General_Models/data/chimp_2a/chimp_2a.fasta"
+chimp2B: "/mnt/SSD2/pholur/General_Models/data/chimp_2b/chimp_2b.fasta"
+
+rat1: "/mnt/SSD2/pholur/General_Models/data/rat1/rat1.fasta"
+rat2: "/mnt/SSD2/pholur/General_Models/data/rat2/rat2.fasta"
+
+ch23Y: "/mnt/SSD2/pholur/General_Models/data/chr23Y/chr23Y.fasta"
+
+chM: "/mnt/SSD2/pholur/General_Models/data/chM/chM.fasta"
