@@ -21,3 +21,4 @@ pandas
 levenshtein
 biopython
 tqdm
+einops
