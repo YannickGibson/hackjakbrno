@@ -22,3 +22,4 @@ levenshtein
 biopython
 tqdm
 einops
+natsort
