@@ -2,7 +2,7 @@
 data/*
 !.gitkeep
 /data/sequeventor
-
+rows_for_db_final.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

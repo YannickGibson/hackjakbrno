@@ -1,10 +1,10 @@
 import os
 from Bio import SeqIO
 from tqdm import tqdm
+from model import DNABERT2
 
 from iris_database import IrisDatabaseHandler
 from check import is_match_pairwise2
-
 
 def main() -> None:
 
@@ -12,16 +12,22 @@ def main() -> None:
     barcodes_path = "data/sequencing_data".replace("\\", "/")
     genes_path = "data/resistance_genes_sequence".replace("\\", "/")
 
+    model = DNABERT2()
+
     # Load genes
     genes = []
+    genes_vectors = {}
     gene_names = []
-    for file in tqdm(os.listdir(genes_path)):
+    files = os.listdir(genes_path)
+    for i, file in tqdm(enumerate(files)):
         with open(genes_path + "/" + file, 'r') as gene_file:
             gene_names.append(".".join(file.split(".")[:-1]))
             genes.append([])
+            genes_vectors[i] = []
             # Append all records: gene and rcomplement
             for record in SeqIO.parse(gene_file, 'fasta'):
                 genes[-1].append(record)
+                genes_vectors[i].append(model.get_embedding(str(record.seq)).detach().tolist()[0])
 
     # Init database
     database = IrisDatabaseHandler()
@@ -39,23 +45,25 @@ def main() -> None:
             for gene_index, gene in tqdm(enumerate(genes)):
                 if barcode_gene_positive[barcode_name][gene_index]:  # constraint is already satisfied
                     continue
-                gene = str(gene[0].seq)  # get string sequence
+                gene = str(genes_vectors[gene_index][0])  # get string sequence
                 
                 # Cosine similarity vector database search
                 matches: list[tuple] = database.search(barcode_name, gene)
+                print(f"Checking {len(matches)} amount of matches.")
 
                 # Verify similar vectors
                 for barcode_name, file_path, index, sequence_string, sequence_vector in matches:
                     is_match, score = is_match_pairwise2(gene, sequence_string)
                     if is_match:
                         barcode_gene_positive[barcode_name][gene_index] = True
+                        break
         
         # End if sequenator is done
         if sequenator_finished:
             break
 
     # Print results
-    for barcode_name, is_gene_positive_list in barcode_gene_positive.values():
+    for barcode_name, is_gene_positive_list in barcode_gene_positive.items():
         for gene_index, is_gene_positive in enumerate(is_gene_positive_list):
             gene_name = gene_names[gene_index]
             print(f"Barcode: {barcode_name}, Gene: {gene_name}, Positive: {is_gene_positive}")
