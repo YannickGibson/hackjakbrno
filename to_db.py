@@ -29,7 +29,7 @@ def load_fastq_file(fastq_path: str, model: DNABERT2, rows: list) -> None:
             # Inference: get embedding
             vector = model.get_embedding(sequence_string).detach().tolist()[0]
 
-            rows.append([fastq_path, i, sequence_string, ",".join(vector)])
+            rows.append([fastq_path, i, sequence_string, ",".join(str(num) for num in vector)])
             # show sequence_string len
             if i == 0 or (i - 1) % EXPORT_EVERY == 0 or i == 3999:  # first or every x'th or last
                 print(f"Exporting {len(rows)} rows to '{EXPORT_PATH}'.")
