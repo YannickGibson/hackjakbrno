@@ -3,13 +3,14 @@ from Bio import SeqIO
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 import pandas as pd
+from natsort import natsorted
 
-from iris_database import IrisDatabaseHandler
 from utils.check import is_match_pairwise2, is_match_waterman
-from model import DNABERT2
+from model.model import DNABERT2
 
 
-def solve(results_number: int, rcomplement: bool, plot_gene_scores: bool = False) -> None:
+def solve(results_number: int, rcomplement: bool = False, plot_gene_scores: bool = False) -> dict[str, dict[str, bool]]:
+    from iris_database import IrisDatabaseHandler
 
     # Arguments
     barcodes_path = "data/sequencing_data".replace("\\", "/")
@@ -21,22 +22,25 @@ def solve(results_number: int, rcomplement: bool, plot_gene_scores: bool = False
     genes = []
     genes_vectors = {}
     gene_names = []
-    files = os.listdir(genes_path)
-    for i, file in enumerate(tqdm(files)):
-        with open(genes_path + "/" + file, 'r') as gene_file:
-            gene_names.append(".".join(file.split(".")[:-1]))
+    gene_files = natsorted(os.listdir(genes_path))
+    for i, file_name in enumerate(tqdm(gene_files)):
+        with open(genes_path + "/" + file_name, 'r') as gene_file:
+            gene_names.append(".".join(file_name.split(".")[:-1]))
             genes.append([])
             genes_vectors[i] = []
             # Append all records: gene and rcomplement
             for record in SeqIO.parse(gene_file, 'fasta'):
                 genes[-1].append(record)
                 genes_vectors[i].append(model.get_embedding(str(record.seq)).detach().tolist()[0])
+                if not rcomplement:
+                    break
 
     # Init database
     database = IrisDatabaseHandler(results_number=results_number)
 
     # Load barcodes
-    barcodes = database.# ["barcode20"]  # os.listdir(barcodes_path)
+    barcodes: tuple[str] = database.get_unique_barcodes()  # ["barcode20"]  # os.listdir(barcodes_path)
+    print(f"Testing barcodes: '{barcodes}' for the following genes: '{gene_names}'")
     barcode_gene_positive = {barcode: [False] * len(genes) for barcode in barcodes}
 
     # Check barcodes
@@ -58,13 +62,13 @@ def solve(results_number: int, rcomplement: bool, plot_gene_scores: bool = False
 
                 # Verify similar vectors
                 for barcode_name, file_path, index, sequence_string, sequence_vector in matches:
-                    is_match, score = is_match_waterman(str(gene[0].seq), sequence_string, verbose=True)
-                    # print(f"IS MATCH: {is_match}  AND SCORE: {score}")
-                    scores.append(score)
-                    if is_match:
-                        print(f"Filename of found bacteria: {file_path}\nIndex: {index}")
-                        barcode_gene_positive[barcode_name][gene_index] = True
-                        break
+                    for curr_gene in gene:  # gene or its rcomplement
+                        is_match, score = is_match_waterman(str(curr_gene.seq), sequence_string, verbose=True)
+                        scores.append(score)
+                        if is_match:
+                            print(f"Filename of found bacteria: {file_path}\nIndex: {index}")
+                            barcode_gene_positive[barcode_name][gene_index] = True
+                            break
 
                 # Set up the figure and axis
                 if plot_gene_scores:
@@ -85,17 +89,35 @@ def solve(results_number: int, rcomplement: bool, plot_gene_scores: bool = False
         else:
             pass  # sleep for x seconds
 
+    result = {barcode_name: {}}
     # Print results
     for barcode_name, is_gene_positive_list in barcode_gene_positive.items():
         for gene_index, is_gene_positive in enumerate(is_gene_positive_list):
             gene_name = gene_names[gene_index]
+            result[barcode_name][gene_name] = is_gene_positive
             print(f"Barcode: {barcode_name}, Gene: {gene_name}, Positive: {is_gene_positive}")
         print("\n")
+
+    return result
+
+
+def mock_solve(results_number: int, rcomplement: bool = False, plot_gene_scores: bool = False) -> dict[str, dict[str, bool]]:
+    # Mock results when the database is not available. Higher results number yields better results.
+    return {
+        "barcode20": {
+            "aph(6)-Id": True    if results_number >= 100 else False,  # Resistance 0
+            "aph(3'')-Ib": True  if results_number >= 80 else False,  # Resistance 0
+            "aac(3)-IIa": True   if results_number >= 50 else False,  # Resistance 1
+            "aac(3)-IId": False  if results_number >= 10 else True,  # Resistance 1
+            "tet(A)": True       if results_number >= 5 else False,  # Resistance 2
+            "tet(D)": False      if results_number >= 2 else True,  # Resistance 2
+        }
+    }
 
 
 def main() -> None:
     solve(
-        results_number=10,  # Number of results for cosine similarity search
+        results_number=10,  # Number of results for cosine similarity search db to search through
         rcomplement=False
     )
 
