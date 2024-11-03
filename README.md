@@ -7,6 +7,8 @@ Simultaneously, `solver.py` retrieves sequences most similar to the currently an
 
 The output from `solver.py` indicates which genes have been identified in the specified bacteria (by barcode).
 
+Control over the entire vector database is managed through the iris_database.py file, which acts as an interface to interact with and manipulate the database. Internally, it utilizes the InterSystems IRIS vector database solution, providing efficient storage, querying, and management of vector data.
+
 ![DNA_diagram](/resources/DNA_diagram.png)
 
 # 💻 Installation
