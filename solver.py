@@ -1,12 +1,15 @@
 import os
 from Bio import SeqIO
 from tqdm import tqdm
-from model import DNABERT2
+import matplotlib.pyplot as plt
+import pandas as pd
 
 from iris_database import IrisDatabaseHandler
 from check import is_match_pairwise2, is_match_waterman
+from model import DNABERT2
 
-def main() -> None:
+
+def solve(results_number: int, rcomplement: bool, plot_gene_scores: bool = False) -> None:
 
     # Arguments
     barcodes_path = "data/sequencing_data".replace("\\", "/")
@@ -30,7 +33,7 @@ def main() -> None:
                 genes_vectors[i].append(model.get_embedding(str(record.seq)).detach().tolist()[0])
 
     # Init database
-    database = IrisDatabaseHandler()
+    database = IrisDatabaseHandler(results_number=results_number)
 
     # Load barcodes
     barcodes = ["barcode20"]  # os.listdir(barcodes_path)
@@ -63,20 +66,24 @@ def main() -> None:
                         barcode_gene_positive[barcode_name][gene_index] = True
                         break
 
-                import matplotlib.pyplot as plt
-                import pandas as pd
-
                 # Set up the figure and axis
-                fig, ax = plt.subplots()
-                line, = ax.plot(range(0, len(scores)), scores, lw=2)
-                ax.plot(range(0, len(scores)), pd.Series(scores).rolling(window=15).mean().tolist(), lw=2)
-                ax.set_xlabel("Vector Index")
-                ax.set_ylabel("Score")
-                plt.show(block=True)
+                if plot_gene_scores:
+                    # Init plot
+                    fig, ax = plt.subplots()
+                    # Plot
+                    ax.plot(range(0, len(scores)), scores, lw=2, label="Scores")
+                    ax.plot(range(0, len(scores)), pd.Series(scores).rolling(window=15).mean().tolist(), lw=2, label="Rolling Mean")
+                    # Configure
+                    ax.set_xlabel("Vector Index")
+                    ax.set_ylabel("Scores")
+                    # Display
+                    plt.show(block=True)
 
         # End if sequenator is done
         if sequenator_finished:
             break
+        else:
+            pass  # sleep for x seconds
 
     # Print results
     for barcode_name, is_gene_positive_list in barcode_gene_positive.items():
@@ -84,6 +91,13 @@ def main() -> None:
             gene_name = gene_names[gene_index]
             print(f"Barcode: {barcode_name}, Gene: {gene_name}, Positive: {is_gene_positive}")
         print("\n")
+
+
+def main() -> None:
+    solve(
+        results_number=10,  # Number of results for cosine similarity search
+        rcomplement=False
+    )
 
 
 if __name__ == "__main__":
