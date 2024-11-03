@@ -40,7 +40,7 @@ from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 def is_match_waterman(gene: str, sequence: str, verbose_if_matched: bool = True, verbose: bool = False) -> tuple[bool, float]:
     # Define threshold
-    SCORE_PERCENT_THRESHOLD = 0.4
+    SCORE_PERCENT_THRESHOLD = 0.92
 
     # Define arguments
     match_bonus = 2
