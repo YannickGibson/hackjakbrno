@@ -7,6 +7,7 @@ from natsort import natsorted
 
 from utils.check import is_match_pairwise2, is_match_waterman
 from model.model import DNABERT2
+from modelRDE import RDE
 
 
 def solve(results_number: int, rcomplement: bool = False, plot_gene_scores: bool = False, verbose=True) -> dict[str, dict[str, bool]]:
@@ -16,7 +17,9 @@ def solve(results_number: int, rcomplement: bool = False, plot_gene_scores: bool
     barcodes_path = "data/sequencing_data".replace("\\", "/")
     genes_path = "data/resistance_genes_sequence".replace("\\", "/")
 
+    # model = RDE()
     model = DNABERT2()
+    model_str = "DNABERT2"
 
     # Load genes
     genes = []
@@ -31,6 +34,7 @@ def solve(results_number: int, rcomplement: bool = False, plot_gene_scores: bool
             # Append all records: gene and rcomplement
             for record in SeqIO.parse(gene_file, 'fasta'):
                 genes[-1].append(record)
+                # genes_vectors[i].append(model.get_embedding(str(record.seq)).tolist())
                 genes_vectors[i].append(model.get_embedding(str(record.seq)).detach().tolist()[0])
                 if not rcomplement:
                     break
@@ -39,7 +43,9 @@ def solve(results_number: int, rcomplement: bool = False, plot_gene_scores: bool
     database = IrisDatabaseHandler(results_number=results_number)
 
     # Load barcodes
-    barcodes: tuple[str] = database.get_unique_barcodes()  # ["barcode20"]  # os.listdir(barcodes_path)
+    barcodes: list[str] = [item[0] for item in database.get_unique_barcodes()]
+    print(barcodes)# ["barcode20"]  # os.listdir(barcodes_path)
+    print(database.get_unique_barcodes())
     print(f"Testing barcodes: '{barcodes}' for the following genes: '{gene_names}'")
     barcode_gene_positive = {barcode: [False] * len(genes) for barcode in barcodes}
 
@@ -60,14 +66,14 @@ def solve(results_number: int, rcomplement: bool = False, plot_gene_scores: bool
                 gene_list_str = str(genes_vectors[gene_index][0])  # get string sequence
 
                 # Cosine similarity vector database search
-                matches: list[tuple] = database.search(barcode_name, gene_list_str)
+                matches: list[tuple] = database.search(barcode_name, gene_list_str, model_str)
                 if verbose:
                     print(f"Checking {len(matches)} amount of matches.")
 
                 # Verify similar vectors
-                for barcode_name, file_path, index, sequence_string, sequence_vector in matches:
+                for barcode_name, file_path, index, sequence_string, sequence_vector, model_name in matches:
                     for curr_gene in gene:  # gene or its rcomplement
-                        is_match, score = is_match_waterman(str(curr_gene.seq), sequence_string, verbose=verbose, verbose_if_matched=verbose)
+                        is_match, score = is_match_waterman(str(curr_gene.seq), sequence_string, verbose=verbose, verbose_if_matched=True)
                         scores.append(score)
                         if is_match:
                             if verbose:
@@ -99,6 +105,8 @@ def solve(results_number: int, rcomplement: bool = False, plot_gene_scores: bool
     for barcode_name, is_gene_positive_list in barcode_gene_positive.items():
         for gene_index, is_gene_positive in enumerate(is_gene_positive_list):
             gene_name = gene_names[gene_index]
+            print(f"SSSS: {gene_name}")
+            print(f"SSSS: {barcode_name}")
             result[barcode_name][gene_name] = is_gene_positive
             print(f"Barcode: {barcode_name}, Gene: {gene_name}, Positive: {is_gene_positive}")
         print("\n")
@@ -129,3 +137,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+

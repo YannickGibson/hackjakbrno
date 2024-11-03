@@ -39,3 +39,4 @@ for filename in os.listdir(FASTQ_DNA_SEQUENCE_PATH):
             df = pd.DataFrame(rows, columns=["barcode", "file_path", "index", "sequence_string", "sequence_vector"])
 
             DB.insert_embedded_sequence(df)
+

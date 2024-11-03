@@ -10,7 +10,7 @@ def is_match_pairwise2(gene: str, sequence: str, verbose_if_matched: bool = True
     mismatch_penalty = -3
     gap_extending_penalty = -.3
     gap_penalty = -2
-    _alignments = pairwise2.align.globalms(sequence, gene, match_bonus, mismatch_penalty, gap_penalty, gap_extending_penalty, one_alignment_only=True)
+    _alignments = pairwise2.align.localms(sequence, gene, match_bonus, mismatch_penalty, gap_penalty, gap_extending_penalty, one_alignment_only=True)
 
     if len(_alignments) == 0:
         return False, 0
@@ -54,7 +54,7 @@ def is_match_waterman(gene: str, sequence: str, verbose_if_matched: bool = True,
     aligner.mismatch_score = mismatch_penalty
     aligner.extend_gap_score = gap_extending_penalty
     aligner.open_gap_score = gap_penalty
-    aligner.mode = 'global'
+    aligner.mode = 'local'
 
     # Perform alignment
     alignments = aligner.align(gene, sequence)
