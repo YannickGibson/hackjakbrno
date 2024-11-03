@@ -12,12 +12,13 @@ Control over the entire vector database is managed through the iris_database.py 
 ![DNA_diagram](/resources/DNA_diagram.png)
 
 # 💻 Installation
-
-Install dependencies:	
+**Install dependencies:**	
 
 	pip install -r requirements
 
-Run scripts:
+**Download and setup InterSystems IRIS database container:** [https://github.com/intersystems-community/hackathon-2024/tree/main?tab=readme-ov-file](https://github.com/intersystems-community/hackathon-2024/tree/main?tab=readme-ov-file)
+
+**Run scripts:**
 	
 	python sequencer_handler.py
 	python solver.py
@@ -30,4 +31,8 @@ Times will be added here.
 
 # 📘 References
 
-Sem přidejte ty papery v citační podobě.
+Smith TF, Waterman MS. Identification of common molecular subsequences. J Mol Biol. 1981 Mar 25;147(1):195-7. doi: 10.1016/0022-2836(81)90087-5. PMID: 7265238. [https://pubmed.ncbi.nlm.nih.gov/7265238/]
+
+Zhihan Zhou, Yanrong Ji, Weĳian Li, Pratik Dutta, Ramana Davuluri, & Han Liu. (2024). DNABERT-2: Efficient Foundation Model and Benchmark For Multi-Species Genome. [https://arxiv.org/abs/2306.15006]
+
+Pavan Holur, K. C. Enevoldsen, Shreyas Rajesh, Lajoyce Mboning, Thalia Georgiou, Louis-S. Bouchard, Matteo Pellegrini, and Vwani Roychowdhury. (2024). Embed-Search-Align: DNA Sequence Alignment using Transformer Models. [https://arxiv.org/abs/2309.11087]
