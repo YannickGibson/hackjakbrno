@@ -39,7 +39,7 @@ def load_fastq_file(fastq_path: str, model: DNABERT2, rows: list) -> None:
 
 def load_barcode(folder_path: str, model: DNABERT2, rows: list) -> None:
     fastq_files = natsorted(os.listdir(folder_path))
-    fastq_files = [file for file in fastq_files if file.endswith(".fastq.gz")]
+    fastq_files = [file for file in fastq_files if file.endswith(".fastq.gz")][4:8]
     print(f"Opening {len(fastq_files)} fastq files.")
     for fastq_file in fastq_files:
         load_fastq_file(fastq_path=folder_path + "/" + fastq_file, model=model, rows=rows)
@@ -54,7 +54,7 @@ def main() -> None:
     rows = []  # file_path, index, vector
 
     # Load barcode folders
-    barcode_folders = sorted(os.listdir(SEQUENCING_DATA_PATH))
+    barcode_folders = ["barcode21", ] # natsorted(os.listdir(SEQUENCING_DATA_PATH))
     print(f"Exporting {len(barcode_folders)} barcode folders.")
     for folder_name in barcode_folders:
         load_barcode(folder_path=SEQUENCING_DATA_PATH + "/" + folder_name, model=model, rows=rows)

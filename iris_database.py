@@ -11,7 +11,7 @@ class IrisDatabaseHandler:
     cursor = None
 
     table_name = f"Sequences"
-    chema_table_name = f"{schema_name}.{table_name}"
+    schema_table_name = f"{schema_name}.{table_name}"
 
     def __init__(self, results_number=100):
         self.results_number = results_number
@@ -89,13 +89,20 @@ class IrisDatabaseHandler:
 
     def update_table(self):
         sql = f"ALTER TABLE {self.schema_table_name} ADD model_used VARCHAR(100)"
+
         self.cursor.execute(sql)
 
+    def get_unique_barcodes(self) -> tuple[tuple[str]]:
+        sql = f"SELECT DISTINCT LOWER(barcode) FROM {self.schema_table_name}"
+
+        self.cursor.execute(sql)
+        return self.cursor.fetchall()[0]
 
 if __name__ == "__main__":
     db = IrisDatabaseHandler()
 
-    db.update_table()
+    print(db.get_unique_barcodes())
+    # db.update_table()
     #
     # db.drop_table()
     # db.create_table()
