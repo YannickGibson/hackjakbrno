@@ -36,7 +36,7 @@ def solve(results_number: int, rcomplement: bool, plot_gene_scores: bool = False
     database = IrisDatabaseHandler(results_number=results_number)
 
     # Load barcodes
-    barcodes = ["barcode20"]  # os.listdir(barcodes_path)
+    barcodes = database.# ["barcode20"]  # os.listdir(barcodes_path)
     barcode_gene_positive = {barcode: [False] * len(genes) for barcode in barcodes}
 
     # Check barcodes
