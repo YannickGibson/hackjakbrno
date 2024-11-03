@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import transformers
 import sys
-sys.path.append("dna2vec")
+sys.path.append("../dna2vec")
 from dna2vec.model import model_from_config
 from evaluate.inference_models import EvalModel
 from dna2vec.tokenizer import BPTokenizer
@@ -13,9 +13,9 @@ from typing import List
 
 checkpoints = {}
 checkpoints['trained'] = {}
-checkpoints['trained']['model'] = torch.load("checkpoint.pt")
+checkpoints['trained']['model'] = torch.load("../checkpoint.pt")
 config = checkpoints['trained']['model']['config']
-config.model_config.tokenizer_path = 'dna2vec/src/model/tokenizers/dna_tokenizer_10k.json'
+config.model_config.tokenizer_path = '../dna2vec/src/model/tokenizers/dna_tokenizer_10k.json'
 model_kwargs = config.dict()
 encoder, pooling, tokenizer = model_from_config(config.model_config)
 #encoder.load_state_dict(checkpoints['trained']['model']['model'])

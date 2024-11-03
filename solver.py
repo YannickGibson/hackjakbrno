@@ -1,10 +1,10 @@
 import os
 from Bio import SeqIO
 from tqdm import tqdm
-from model import DNABERT2
+from model.model import DNABERT2
 
 from iris_database import IrisDatabaseHandler
-from check import is_match_pairwise2, is_match_waterman
+from utils.check import is_match_waterman
 
 def main() -> None:
 
