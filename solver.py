@@ -4,7 +4,7 @@ from tqdm import tqdm
 from model import DNABERT2
 
 from iris_database import IrisDatabaseHandler
-from check import is_match_pairwise2
+from check import is_match_pairwise2, is_match_waterman
 
 def main() -> None:
 
@@ -42,7 +42,9 @@ def main() -> None:
         for barcode_name in barcodes:
             print(f"Checking barcode: {barcode_name}")
             # Check if barcode is in genes
+            scores = []
             for gene_index, gene in enumerate(tqdm(genes)):
+                print(f"Current gene: {gene_names[gene_index]}")
                 if barcode_gene_positive[barcode_name][gene_index]:  # constraint is already satisfied
                     continue
                 gene_list_str = str(genes_vectors[gene_index][0])  # get string sequence
@@ -53,12 +55,25 @@ def main() -> None:
 
                 # Verify similar vectors
                 for barcode_name, file_path, index, sequence_string, sequence_vector in matches:
-                    is_match, score = is_match_pairwise2(str(gene[0].seq), sequence_string, verbose=True)
+                    is_match, score = is_match_waterman(str(gene[0].seq), sequence_string, verbose=True)
                     # print(f"IS MATCH: {is_match}  AND SCORE: {score}")
+                    scores.append(score)
                     if is_match:
+                        print(f"Filename of found bacteria: {file_path}\nIndex: {index}")
                         barcode_gene_positive[barcode_name][gene_index] = True
                         break
-        
+
+                import matplotlib.pyplot as plt
+                import pandas as pd
+
+                # Set up the figure and axis
+                fig, ax = plt.subplots()
+                line, = ax.plot(range(0, len(scores)), scores, lw=2)
+                ax.plot(range(0, len(scores)), pd.Series(scores).rolling(window=15).mean().tolist(), lw=2)
+                ax.set_xlabel("Vector Index")
+                ax.set_ylabel("Score")
+                plt.show(block=True)
+
         # End if sequenator is done
         if sequenator_finished:
             break
