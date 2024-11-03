@@ -6,9 +6,9 @@ import gzip
 import pandas as pd
 from natsort import natsorted
 
-SEQUENCING_DATA_PATH = "data/sequencing_data".replace('\\', "/")
+SEQUENCING_DATA_PATH = "../data/sequencing_data".replace('\\', "/")
 EXPORT_EVERY = 1000
-EXPORT_PATH = "data/rows_for_db.csv"
+EXPORT_PATH = "../data/rows_for_db.csv"
 MAX_SEQUENCE_LENGTH = 10000
 
 

@@ -1,9 +1,7 @@
-from model import DNABERT2
+from model.model import DNABERT2
 from Bio import SeqIO
 from tqdm import tqdm
 import os
-import gzip
-import time
 import pandas as pd
 from iris_database import IrisDatabaseHandler
 

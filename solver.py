@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 from iris_database import IrisDatabaseHandler
-from check import is_match_pairwise2, is_match_waterman
+from utils.check import is_match_pairwise2, is_match_waterman
 from model import DNABERT2
 
 
