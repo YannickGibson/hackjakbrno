@@ -9,7 +9,7 @@ from utils.check import is_match_pairwise2, is_match_waterman
 from model.model import DNABERT2
 
 
-def solve(results_number: int, rcomplement: bool = False, plot_gene_scores: bool = False) -> dict[str, dict[str, bool]]:
+def solve(results_number: int, rcomplement: bool = False, plot_gene_scores: bool = False, verbose=True) -> dict[str, dict[str, bool]]:
     from iris_database import IrisDatabaseHandler
 
     # Arguments
@@ -46,27 +46,32 @@ def solve(results_number: int, rcomplement: bool = False, plot_gene_scores: bool
     # Check barcodes
     sequenator_finished = True
     while True:
-        for barcode_name in barcodes:
-            print(f"Checking barcode: {barcode_name}")
+        iterable = barcodes if verbose else tqdm(barcodes)
+        for barcode_name in iterable:
+            if verbose:
+                print(f"Checking barcode: {barcode_name}")
             # Check if barcode is in genes
             scores = []
             for gene_index, gene in enumerate(tqdm(genes)):
-                print(f"Current gene: {gene_names[gene_index]}")
+                if verbose:
+                    print(f"Current gene: {gene_names[gene_index]}")
                 if barcode_gene_positive[barcode_name][gene_index]:  # constraint is already satisfied
                     continue
                 gene_list_str = str(genes_vectors[gene_index][0])  # get string sequence
 
                 # Cosine similarity vector database search
                 matches: list[tuple] = database.search(barcode_name, gene_list_str)
-                print(f"Checking {len(matches)} amount of matches.")
+                if verbose:
+                    print(f"Checking {len(matches)} amount of matches.")
 
                 # Verify similar vectors
                 for barcode_name, file_path, index, sequence_string, sequence_vector in matches:
                     for curr_gene in gene:  # gene or its rcomplement
-                        is_match, score = is_match_waterman(str(curr_gene.seq), sequence_string, verbose=True)
+                        is_match, score = is_match_waterman(str(curr_gene.seq), sequence_string, verbose=verbose, verbose_if_matched=verbose)
                         scores.append(score)
                         if is_match:
-                            print(f"Filename of found bacteria: {file_path}\nIndex: {index}")
+                            if verbose:
+                                print(f"Filename of found bacteria: {file_path}\nIndex: {index}")
                             barcode_gene_positive[barcode_name][gene_index] = True
                             break
 
@@ -101,7 +106,7 @@ def solve(results_number: int, rcomplement: bool = False, plot_gene_scores: bool
     return result
 
 
-def mock_solve(results_number: int, rcomplement: bool = False, plot_gene_scores: bool = False) -> dict[str, dict[str, bool]]:
+def mock_solve(results_number: int, rcomplement: bool = False, plot_gene_scores: bool = False, verbose=True) -> dict[str, dict[str, bool]]:
     # Mock results when the database is not available. Higher results number yields better results.
     return {
         "barcode20": {
