@@ -25,4 +25,3 @@ class DNABERT2:
             return torch.min(embeddings, dim=1)
         else:
             raise ValueError(f"Embedding method is invalid ({method})")
-
